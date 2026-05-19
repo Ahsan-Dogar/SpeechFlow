@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpeechFlow — Ultra Fast Text to Speech</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="violet">
+
+<div class="bg-radial"></div>
+<div class="bg-grid"></div>
+
+<header>
+  <div class="logo">
+    <div class="logo-mark">🎙️</div>
+    <div class="logo-words">
+      <div class="logo-name">SpeechFlow</div>
+      <div class="logo-by">by Ahsan</div>
+    </div>
+  </div>
+
+  <div class="hdr-right">
+    <button class="theme-btn" onclick="cycleTheme()">
+      <span class="theme-dot"></span>
+      <span id="theme-lbl">Violet</span>
+    </button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <span class="live"></span>
+      Ultra Fast Parallel TTS · No Server Rendering
+    </div>
+
+    <h1>Convert text to<br>natural speech.</h1>
+
+    <p class="hero-sub">
+      Lightning fast text-to-speech with parallel chunk processing directly in your browser.
+    </p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-val">580+</div><div class="stat-lbl">Voices</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">Text</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-val">∞×</div><div class="stat-lbl">Speed</div></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><div class="stat-val">0</div><div class="stat-lbl">Backend</div></div>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="grid">
+
+    <!-- LEFT -->
+    <div class="col-left">
+
+      <!-- TEXT -->
+      <div class="card">
+        <div class="card-hdr">
+          <span class="card-title">Your Text</span>
+        </div>
+
+        <div class="card-body">
+          <textarea id="text-input" placeholder="Type here..." oninput="updateCount()"></textarea>
+        </div>
+      </div>
+
+      <!-- GENERATE -->
+      <div class="card">
+        <div class="card-hdr">
+          <span class="card-title">Generate</span>
+        </div>
+
+        <div class="card-body">
+
+          <div class="sel-disp empty" id="sel-disp">
+            🎤 No voice selected
+          </div>
+
+          <button class="gen-btn" onclick="generate()">
+            Generate Speech
+          </button>
+
+          <div class="prog-wrap" id="prog-wrap">
+            <div class="prog-bar">
+              <div class="prog-fill" id="prog-fill"></div>
+            </div>
+            <div class="prog-txt" id="prog-txt">Processing...</div>
+          </div>
+
+          <div class="res-wrap" id="res-wrap">
+            <div class="res-box">
+              <audio id="audio-player" controls></audio>
+
+              <a class="dl-btn" id="dl-btn" download="speech.mp3">
+                Download MP3
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="col-right">
+
+      <div class="card">
+        <div class="card-hdr">
+          <span class="card-title">Voice Library</span>
+        </div>
+
+        <div class="card-body">
+
+          <input class="vsearch" id="vsearch" placeholder="Search voices..." oninput="filterVoices()">
+
+          <div class="vlist" id="vlist">
+            <div class="loading">Loading voices...</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-brand">SpeechFlow</div>
+      <div class="footer-sub">Ultra-fast parallel TTS </div>
+    </div>
+    <div class="footer-right">
+      <span>by Ahsan</span>
+      <span class="footer-sep">·</span>
+      <span>© 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
