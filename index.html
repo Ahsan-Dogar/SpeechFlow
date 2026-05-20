@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SpeechFlow — Ultra Fast Text to Speech</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SpeechFlow — Parallel Text to Speech</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
-
 <body data-theme="violet">
-
 <div class="bg-radial"></div>
 <div class="bg-grid"></div>
 
@@ -23,136 +19,92 @@
       <div class="logo-by">by Ahsan</div>
     </div>
   </div>
-
-  <div class="hdr-right">
-    <button class="theme-btn" onclick="cycleTheme()">
-      <span class="theme-dot"></span>
-      <span id="theme-lbl">Violet</span>
-    </button>
-  </div>
+  <button class="theme-btn" onclick="cycleTheme()">
+    <span class="theme-dot"></span>
+    <span id="theme-lbl">Violet</span>
+  </button>
 </header>
 
 <div class="wrap">
-
-  <!-- HERO -->
   <div class="hero">
-    <div class="hero-badge">
-      <span class="live"></span>
-      Ultra Fast Parallel TTS · No Server Rendering
-    </div>
-
-    <h1>Convert text to<br>natural speech.</h1>
-
-    <p class="hero-sub">
-      Lightning fast text-to-speech with parallel chunk processing directly in your browser.
-    </p>
-
+    <div class="hero-badge"><span class="live"></span> All chunks fire in parallel · Instant merge · No server-side ffmpeg</div>
+    <h1>Text to speech<br>with unlimited scale</h1>
+    <p class="hero-sub">True parallel synthesis — every chunk sent at once. Ultra fast, no queues, works on any device.</p>
     <div class="stats">
       <div class="stat"><div class="stat-val">580+</div><div class="stat-lbl">Voices</div></div>
       <div class="stat-sep"></div>
-      <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">Text</div></div>
+      <div class="stat"><div class="stat-val">∞</div><div class="stat-lbl">Text length</div></div>
       <div class="stat-sep"></div>
-      <div class="stat"><div class="stat-val">∞×</div><div class="stat-lbl">Speed</div></div>
-      <div class="stat-sep"></div>
-      <div class="stat"><div class="stat-val">0</div><div class="stat-lbl">Backend</div></div>
+      <div class="stat"><div class="stat-val">∞×</div><div class="stat-lbl">Parallel calls</div></div>
     </div>
   </div>
 
-  <!-- GRID -->
   <div class="grid">
-
-    <!-- LEFT -->
-    <div class="col-left">
-
-      <!-- TEXT -->
+    <!-- left column -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+      <!-- text card -->
       <div class="card">
         <div class="card-hdr">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           <span class="card-title">Your Text</span>
         </div>
-
         <div class="card-body">
-          <textarea id="text-input" placeholder="Type here..." oninput="updateCount()"></textarea>
+          <div class="ta-wrap">
+            <textarea id="text-input" placeholder="Paste any text (articles, scripts, stories) — long text splits into chunks and fires simultaneously ⚡" oninput="updateCount()"></textarea>
+            <span class="char-ctr" id="char-ctr">0</span>
+          </div>
         </div>
       </div>
 
-      <!-- GENERATE -->
+      <!-- generate card -->
       <div class="card">
         <div class="card-hdr">
-          <span class="card-title">Generate</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span class="card-title">Generate Speech</span>
         </div>
-
         <div class="card-body">
-
-          <div class="sel-disp empty" id="sel-disp">
-            🎤 No voice selected
-          </div>
-
-          <button class="gen-btn" onclick="generate()">
+          <div class="sel-disp empty" id="sel-disp">🎤 No voice selected — pick a voice →</div>
+          <button class="gen-btn" id="gen-btn" onclick="generate()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
             Generate Speech
           </button>
-
           <div class="prog-wrap" id="prog-wrap">
-            <div class="prog-bar">
-              <div class="prog-fill" id="prog-fill"></div>
-            </div>
-            <div class="prog-txt" id="prog-txt">Processing...</div>
+            <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+            <div class="prog-txt" id="prog-txt">Preparing...</div>
+            <div class="chunk-grid" id="chunk-grid"></div>
           </div>
-
           <div class="res-wrap" id="res-wrap">
             <div class="res-box">
-              <audio id="audio-player" controls></audio>
-
-              <a class="dl-btn" id="dl-btn" download="speech.mp3">
+              <div class="res-lbl"><span class="d"></span>✨ Audio ready</div>
+              <audio id="audio-player" controls preload="auto"></audio>
+              <a class="dl-btn" id="dl-btn" href="#" download="speech.mp3">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                 Download MP3
               </a>
             </div>
+            <div id="toast" class="toast"></div>
           </div>
-
         </div>
       </div>
-
     </div>
 
-    <!-- RIGHT -->
-    <div class="col-right">
-
-      <div class="card">
-        <div class="card-hdr">
-          <span class="card-title">Voice Library</span>
-        </div>
-
-        <div class="card-body">
-
-          <input class="vsearch" id="vsearch" placeholder="Search voices..." oninput="filterVoices()">
-
-          <div class="vlist" id="vlist">
-            <div class="loading">Loading voices...</div>
-          </div>
-
-        </div>
+    <!-- right column: voice library -->
+    <div class="card">
+      <div class="card-hdr">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        <span class="card-title">Voice Library</span>
       </div>
-
+      <div class="card-body">
+        <input class="vsearch" id="vsearch" type="text" placeholder="🔍 Search by name, language, country..." oninput="filterVoices()">
+        <div class="vlist" id="vlist"><div style="text-align:center;padding:2rem;color:var(--muted);font-family:var(--mono);">Loading voices...</div></div>
+      </div>
     </div>
-
   </div>
-
 </div>
 
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-left">
-      <div class="footer-brand">SpeechFlow</div>
-      <div class="footer-sub">Ultra-fast parallel TTS </div>
-    </div>
-    <div class="footer-right">
-      <span>by Ahsan</span>
-      <span class="footer-sep">·</span>
-      <span>© 2026</span>
-    </div>
-  </div>
+<footer>
+SpeechFlow — AI Powered Text-to-Speech Platform • 580+ Ultra-Realistic AI Voices • Developed by Ahsan
 </footer>
-
 <script src="script.js"></script>
-
 </body>
 </html>
