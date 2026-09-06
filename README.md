@@ -6,6 +6,8 @@
 
 SpeechFlow synthesizes long texts **instantly** by splitting them into chunks and firing them **in parallel**, then merging the audio directly in your browser. Unlimited length, zero server-side processing, multiple themes.
 
+[![View Live Demo](https://img.shields.io/badge/🚀-View_Live_Demo-00C853?style=flat-square)](https://ahsan-dogar.github.io/SpeechFlow/)
+
 [![Performance](https://img.shields.io/badge/performance-parallel-brightgreen)]()
 [![Length](https://img.shields.io/badge/length-unlimited-blue)]()
 [![Dependencies](https://img.shields.io/badge/dependencies-zero-yellow)]()
